@@ -1,0 +1,62 @@
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model Widget {
+    id             String      @id @default(auto()) @map("_id") @db.ObjectId
+    type           String
+    order          Int
+    show           Boolean     @default(true)
+    createdAt      DateTime    @default(now())
+    bannerData     Banner?
+    sliderData     Slider[]
+    productsData   Products?
+    categoriesData Categories?
+    brandsData     Brands?
+}
+
+enum Role {
+    BANNER
+    SLIDER
+}
+
+type Banner {
+    name_en  String
+    name_ar  String
+    url_en   String
+    url_ar   String
+    ref_type String?
+    ref_id   Int?
+}
+
+type Slider {
+    name_en  String
+    name_ar  String
+    url_en   String
+    url_ar   String
+    ref_type String?
+    ref_id   Int?
+}
+
+type Products {
+    name_en      String
+    name_ar      String
+    category_id  Int?
+    products_ids Int[]
+}
+
+type Categories {
+    name_en        String
+    name_ar        String
+    categories_ids Int[]
+}
+
+type Brands {
+    name_en String
+    name_ar String
+}
