@@ -30,7 +30,7 @@ type Banner {
     name_ar  String
     url_en   String
     url_ar   String
-    ref_type String?
+    ref_type String? @default("Default")
     ref_id   Int?
 }
 
@@ -39,7 +39,7 @@ type Slider {
     name_ar  String
     url_en   String
     url_ar   String
-    ref_type String?
+    ref_type String? @default("Default")
     ref_id   Int?
 }
 

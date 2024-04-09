@@ -1,8 +1,12 @@
+"use server";
+
+import { getWidgetsAction } from "@/actions/global.actions";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import Link from "next/link";
-const types = ["products"];
-export default function Home() {
+export default async function Home() {
+  const widgets = await getWidgetsAction();
+  console.log("all widgets ", widgets);
+
   return (
     <main className="container w-3/4">
       <Link href={"/create"}>

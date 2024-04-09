@@ -8,7 +8,7 @@ const page = () => {
       <Link href={"/create/banner"}>
         <Button>Banner</Button>
       </Link>
-      <Link href={"/create"}>
+      <Link href={"/create/slider"}>
         <Button>Slide</Button>
       </Link>
       <Link href={"/create"}>

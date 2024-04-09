@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
 import {
@@ -27,10 +28,14 @@ import {
 } from "@/validation";
 import Spinner from "@/components/Spinner";
 import { useState } from "react";
-import { createReferencedBannerAction } from "@/actions/banner.actions";
+import {
+  createReferencedBannerAction,
+  getBannersAction,
+} from "@/actions/banner.actions";
 import { uploadImage } from "@/firebase";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { createReferencedSliderItemAction } from "@/actions/slider.actions";
 
 const referenceValues = ["Product", "Category"];
 const defaultValues: Partial<ReferencedBannerFormValues> = {
@@ -40,7 +45,7 @@ const defaultValues: Partial<ReferencedBannerFormValues> = {
   ref_id: 1,
 };
 
-export function ReferencedBannerForm() {
+export function ReferencedSliderForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<ReferencedBannerFormValues>({
@@ -52,20 +57,22 @@ export function ReferencedBannerForm() {
   async function onSubmit(data: ReferencedBannerFormValues) {
     try {
       setIsLoading(true);
+      const widgets = await getBannersAction();
       const url_en = await uploadImage(data.image_en);
       const url_ar = await uploadImage(data.image_ar);
-      await createReferencedBannerAction({
+      await createReferencedSliderItemAction({
         name_en: data.name_en,
         name_ar: data.name_ar,
         url_en: url_en!,
         url_ar: url_ar!,
-        type: "banner",
+        type: "slider",
         ref_type: data.ref_type,
         ref_id: data.ref_id,
       });
+      setIsLoading(false);
       toast({
         title: "Your Widget has been submitted.",
-        description: "Your Banner has been created successfully.",
+        description: "Your Slider has been created successfully.",
       });
     } catch (error) {
       console.log("error", error);
@@ -79,8 +86,6 @@ export function ReferencedBannerForm() {
           </ToastAction>
         ),
       });
-    } finally {
-      setIsLoading(false);
     }
   }
 

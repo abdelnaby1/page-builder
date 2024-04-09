@@ -3,11 +3,20 @@ import {} from "@/validation";
 import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { title } from "process";
 const prisma = new PrismaClient();
 
-export const getBannersAction = async () => {
-  return await prisma.widget.findMany();
+export const getAllBannersAction = async () => {
+  return await prisma.widget.findMany({
+    where: {
+      type: "banner",
+    },
+    select: {
+      id: true,
+      type: true,
+      bannerData: true,
+      createdAt: true,
+    },
+  });
 };
 export const createDefaultBannerAction = async ({
   name_en,
@@ -22,9 +31,18 @@ export const createDefaultBannerAction = async ({
   url_ar: string;
   type: string;
 }) => {
-  const currentCount = await prisma.widget.count();
+  const lastWidget = await prisma.widget.findMany({
+    orderBy: { order: "desc" },
+    take: 1,
+    select: {
+      order: true,
+    },
+  });
+  let order = 1;
+  if (lastWidget.length) {
+    order = lastWidget[0].order + 1;
+  }
 
-  const order = currentCount + 1;
   await prisma.widget.create({
     data: {
       order,
@@ -33,6 +51,7 @@ export const createDefaultBannerAction = async ({
     },
   });
   revalidatePath("/");
+
   redirect(`/`);
 };
 export const createReferencedBannerAction = async ({

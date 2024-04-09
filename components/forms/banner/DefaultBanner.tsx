@@ -18,10 +18,7 @@ import { Button } from "@/components/ui/button";
 import { DefaultBannerFormSchema, DefaultBannerFormValues } from "@/validation";
 import { useState } from "react";
 import { uploadImage } from "@/firebase";
-import {
-  createDefaultBannerAction,
-  getBannersAction,
-} from "@/actions/banner.actions";
+import { createDefaultBannerAction } from "@/actions/banner.actions";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import Spinner from "@/components/Spinner";
@@ -29,6 +26,8 @@ import Spinner from "@/components/Spinner";
 const defaultValues: Partial<DefaultBannerFormValues> = {
   name_en: "",
   name_ar: "",
+  image_en: null,
+  image_ar: null,
 };
 
 export function DefaultBannerForm() {
@@ -42,8 +41,6 @@ export function DefaultBannerForm() {
   async function onSubmit(data: DefaultBannerFormValues) {
     try {
       setIsLoading(true);
-      const widgets = await getBannersAction();
-      console.log("widgets", widgets);
       const url_en = await uploadImage(data.image_en);
       const url_ar = await uploadImage(data.image_ar);
       await createDefaultBannerAction({
@@ -70,6 +67,8 @@ export function DefaultBannerForm() {
           </ToastAction>
         ),
       });
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -132,7 +131,7 @@ export function DefaultBannerForm() {
           name="image_ar"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Enlgish Image</FormLabel>
+              <FormLabel>Arabic Image</FormLabel>
               <FormControl>
                 <Input
                   {...field}

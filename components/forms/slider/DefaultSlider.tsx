@@ -1,71 +1,58 @@
 "use client";
 
+import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Button } from "@/components/ui/button";
-import {
-  ReferencedBannerFormSchema,
-  ReferencedBannerFormValues,
-} from "@/validation";
-import Spinner from "@/components/Spinner";
+import { DefaultBannerFormSchema, DefaultBannerFormValues } from "@/validation";
 import { useState } from "react";
-import { createReferencedBannerAction } from "@/actions/banner.actions";
 import { uploadImage } from "@/firebase";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import Spinner from "@/components/Spinner";
+import { createDefaultSliderItemAction } from "@/actions/slider.actions";
 
-const referenceValues = ["Product", "Category"];
-const defaultValues: Partial<ReferencedBannerFormValues> = {
+const defaultValues: Partial<DefaultBannerFormValues> = {
   name_en: "",
   name_ar: "",
-  ref_type: "",
-  ref_id: 1,
 };
 
-export function ReferencedBannerForm() {
+export function DefaultSliderForm() {
   const [isLoading, setIsLoading] = useState(false);
-
-  const form = useForm<ReferencedBannerFormValues>({
-    resolver: zodResolver(ReferencedBannerFormSchema),
+  const form = useForm<DefaultBannerFormValues>({
+    resolver: zodResolver(DefaultBannerFormSchema),
     defaultValues,
     mode: "onChange",
   });
 
-  async function onSubmit(data: ReferencedBannerFormValues) {
+  async function onSubmit(data: DefaultBannerFormValues) {
     try {
       setIsLoading(true);
+
       const url_en = await uploadImage(data.image_en);
       const url_ar = await uploadImage(data.image_ar);
-      await createReferencedBannerAction({
+      await createDefaultSliderItemAction({
         name_en: data.name_en,
         name_ar: data.name_ar,
         url_en: url_en!,
         url_ar: url_ar!,
-        type: "banner",
-        ref_type: data.ref_type,
-        ref_id: data.ref_id,
+        type: "slider",
       });
+      setIsLoading(false);
       toast({
         title: "Your Widget has been submitted.",
-        description: "Your Banner has been created successfully.",
+        description: "Your Slider has been created successfully.",
       });
     } catch (error) {
       console.log("error", error);
@@ -79,8 +66,6 @@ export function ReferencedBannerForm() {
           </ToastAction>
         ),
       });
-    } finally {
-      setIsLoading(false);
     }
   }
 
@@ -129,8 +114,6 @@ export function ReferencedBannerForm() {
                     const files = e.target.files;
                     if (files) {
                       const fileList = Array.from(files);
-                      console.log("files", files);
-                      console.log("fileList", fileList);
                       field.onChange(files[0]);
                     }
                   }}
@@ -165,46 +148,7 @@ export function ReferencedBannerForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="ref_type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Reference Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a Reference Type" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {referenceValues.map((v, idx) => (
-                    <SelectItem key={idx} value={v}>
-                      {v}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                You can select the type which will This banner reference it.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="ref_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Reference ID</FormLabel>
-              <FormControl>
-                <Input placeholder="Reference Id..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
         {isLoading ? (
           <Button>
             <Spinner /> <p className="mx-1">Saving</p>
