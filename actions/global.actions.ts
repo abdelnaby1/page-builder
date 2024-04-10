@@ -5,8 +5,11 @@ const prisma = new PrismaClient();
 
 export const getWidgetsAction = async () => {
   return await prisma.widget.findMany({
-    orderBy: {
-      order: "asc",
-    },
+    orderBy: [
+      {
+        order: "asc",
+      },
+      { createdAt: "asc" },
+    ],
   });
 };

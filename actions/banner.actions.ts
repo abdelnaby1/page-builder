@@ -50,9 +50,9 @@ export const createDefaultBannerAction = async ({
       bannerData: { name_en, name_ar, url_en, url_ar },
     },
   });
-  revalidatePath("/");
+  revalidatePath("/banners");
 
-  redirect(`/`);
+  redirect(`/banners`);
 };
 export const createReferencedBannerAction = async ({
   name_en,
@@ -81,8 +81,9 @@ export const createReferencedBannerAction = async ({
       bannerData: { name_en, name_ar, url_en, url_ar, ref_type, ref_id },
     },
   });
-  revalidatePath("/");
-  redirect(`/`);
+  revalidatePath("/banners");
+
+  redirect(`/banners`);
 };
 export const updateTodoAction = async () => {};
 export const deleteTodoAction = async () => {};

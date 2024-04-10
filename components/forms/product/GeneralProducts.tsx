@@ -1,59 +1,68 @@
 "use client";
 
-import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { DefaultBannerFormSchema, DefaultBannerFormValues } from "@/validation";
+import {
+  GeneralProductsFormSchema,
+  GeneralProductsFormValues,
+} from "@/validation";
+import Spinner from "@/components/Spinner";
 import { useState } from "react";
-import { uploadImage } from "@/firebase";
-import { createDefaultBannerAction } from "@/actions/banner.actions";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import Spinner from "@/components/Spinner";
+import { capitalizeEveryWord } from "@/lib/utils";
+import { createGeneralProductsAction } from "@/actions/products.actions";
 
-const defaultValues: Partial<DefaultBannerFormValues> = {
+const types = ["featured_products", "sale_products"];
+const directions = ["horizontal", "vertical"];
+const defaultValues: Partial<GeneralProductsFormValues> = {
   name_en: "",
   name_ar: "",
-  image_en: null,
-  image_ar: null,
+  type: types[0],
+  direction: directions[0],
 };
 
-export function DefaultBannerForm() {
+export function GeneralProductsForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const form = useForm<DefaultBannerFormValues>({
-    resolver: zodResolver(DefaultBannerFormSchema),
+
+  const form = useForm<GeneralProductsFormValues>({
+    resolver: zodResolver(GeneralProductsFormSchema),
     defaultValues,
     mode: "onChange",
   });
 
-  async function onSubmit(data: DefaultBannerFormValues) {
+  async function onSubmit(data: GeneralProductsFormValues) {
     try {
       setIsLoading(true);
-      const url_en = await uploadImage(data.image_en);
-      const url_ar = await uploadImage(data.image_ar);
-      await createDefaultBannerAction({
+      await createGeneralProductsAction({
         name_en: data.name_en,
         name_ar: data.name_ar,
-        url_en: url_en!,
-        url_ar: url_ar!,
-        type: "banner",
+        type: data.direction + "_" + data.type,
       });
       toast({
         title: "Your Widget has been submitted.",
-        description: "Your Banner has been created successfully.",
+        description: "Your Products Widget has been created successfully.",
       });
+      form.reset();
     } catch (error) {
       console.log("error", error);
       toast({
@@ -100,52 +109,51 @@ export function DefaultBannerForm() {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
-          name="image_en"
+          name="type"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Enlgish Image</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="file"
-                  accept="image/jpeg, image/png image/jpg"
-                  value={undefined}
-                  onChange={(e) => {
-                    const files = e.target.files;
-                    if (files) {
-                      const fileList = Array.from(files);
-                      field.onChange(files[0]);
-                    }
-                  }}
-                />
-              </FormControl>
+              <FormLabel>Type</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a type for this Products Widget" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {types.map((v, idx) => (
+                    <SelectItem key={idx} value={v}>
+                      {capitalizeEveryWord(v.replace(/_/g, " "))}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
-          name="image_ar"
+          name="direction"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Arabic Image</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="file"
-                  accept="image/jpeg, image/png image/jpg"
-                  value={undefined}
-                  onChange={(e) => {
-                    const files = e.target.files;
-
-                    if (files) {
-                      field.onChange(files[0]);
-                    }
-                  }}
-                />
-              </FormControl>
+              <FormLabel>Direction</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a direction of this Products Widget" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {directions.map((v, idx) => (
+                    <SelectItem key={idx} value={v}>
+                      {capitalizeEveryWord(v)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

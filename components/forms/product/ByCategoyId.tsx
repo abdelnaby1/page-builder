@@ -15,45 +15,58 @@ import {
 } from "@/components/ui/form";
 
 import { Button } from "@/components/ui/button";
-import { DefaultBannerFormSchema, DefaultBannerFormValues } from "@/validation";
+import {
+  DefaultBannerFormSchema,
+  DefaultBannerFormValues,
+  ProductsByCategoryIdFormSchema,
+  ProductsByCategoryIdFormValues,
+} from "@/validation";
 import { useState } from "react";
 import { uploadImage } from "@/firebase";
 import { createDefaultBannerAction } from "@/actions/banner.actions";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import Spinner from "@/components/Spinner";
+import { createProductsByCategoryIdAction } from "@/actions/products.actions";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { capitalizeEveryWord } from "@/lib/utils";
 
-const defaultValues: Partial<DefaultBannerFormValues> = {
+const directions = ["horizontal", "vertical"];
+const defaultValues: Partial<ProductsByCategoryIdFormValues> = {
   name_en: "",
   name_ar: "",
-  image_en: null,
-  image_ar: null,
+  category_id: 1,
+  direction: directions[0],
 };
 
-export function DefaultBannerForm() {
+export function ByCategoryIdForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const form = useForm<DefaultBannerFormValues>({
-    resolver: zodResolver(DefaultBannerFormSchema),
+  const form = useForm<ProductsByCategoryIdFormValues>({
+    resolver: zodResolver(ProductsByCategoryIdFormSchema),
     defaultValues,
     mode: "onChange",
   });
 
-  async function onSubmit(data: DefaultBannerFormValues) {
+  async function onSubmit(data: ProductsByCategoryIdFormValues) {
     try {
       setIsLoading(true);
-      const url_en = await uploadImage(data.image_en);
-      const url_ar = await uploadImage(data.image_ar);
-      await createDefaultBannerAction({
+      await createProductsByCategoryIdAction({
         name_en: data.name_en,
         name_ar: data.name_ar,
-        url_en: url_en!,
-        url_ar: url_ar!,
-        type: "banner",
+        category_id: data.category_id,
+        type: data.direction + "_products_by_category_id",
       });
       toast({
         title: "Your Widget has been submitted.",
-        description: "Your Banner has been created successfully.",
+        description: "Your Products Widget has been created successfully.",
       });
+      form.reset();
     } catch (error) {
       console.log("error", error);
       toast({
@@ -102,24 +115,12 @@ export function DefaultBannerForm() {
         />
         <FormField
           control={form.control}
-          name="image_en"
+          name="category_id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Enlgish Image</FormLabel>
+              <FormLabel>Category ID</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  type="file"
-                  accept="image/jpeg, image/png image/jpg"
-                  value={undefined}
-                  onChange={(e) => {
-                    const files = e.target.files;
-                    if (files) {
-                      const fileList = Array.from(files);
-                      field.onChange(files[0]);
-                    }
-                  }}
-                />
+                <Input placeholder="Category Id..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -127,30 +128,28 @@ export function DefaultBannerForm() {
         />
         <FormField
           control={form.control}
-          name="image_ar"
+          name="direction"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Arabic Image</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="file"
-                  accept="image/jpeg, image/png image/jpg"
-                  value={undefined}
-                  onChange={(e) => {
-                    const files = e.target.files;
-
-                    if (files) {
-                      field.onChange(files[0]);
-                    }
-                  }}
-                />
-              </FormControl>
+              <FormLabel>Direction</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a direction of this Products Widget" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {directions.map((v, idx) => (
+                    <SelectItem key={idx} value={v}>
+                      {capitalizeEveryWord(v)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
         />
-
         {isLoading ? (
           <Button>
             <Spinner /> <p className="mx-1">Saving</p>
