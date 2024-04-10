@@ -32,7 +32,7 @@ const BannerCard = ({ banner }: Iprops) => {
   console.log(banner.bannerData?.ref_id);
 
   return (
-    <Card className="mb-2">
+    <Card className="mb-2 ">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <Badge className="w-fit">{banner.bannerData?.ref_type}</Badge>
@@ -48,22 +48,18 @@ const BannerCard = ({ banner }: Iprops) => {
         </CardTitle>
         {/* <CardDescription>Card Description</CardDescription> */}
       </CardHeader>
-      <CardContent>
-        <Carousel className="w-full max-w-xs">
+      <CardContent className="p-0">
+        <Carousel className="w-full ">
           <CarouselContent>
             {imgs.map((img, index) => (
               <CarouselItem key={index}>
                 <div className="p-1">
-                  <Card>
-                    <CardContent className="flex aspect-square items-center justify-center p-6">
-                      <Image
-                        src={img}
-                        alt={banner?.bannerData?.name_en as string}
-                        width={640}
-                        height={392}
-                      />
-                    </CardContent>
-                  </Card>
+                  <Image
+                    src={img}
+                    alt={banner?.bannerData?.name_en as string}
+                    width={900}
+                    height={400}
+                  />
                 </div>
               </CarouselItem>
             ))}
@@ -74,11 +70,11 @@ const BannerCard = ({ banner }: Iprops) => {
       </CardContent>
       <CardFooter className="flex flex-col space-y-4">
         <div className="w-full flex items-center justify-between self-start">
-          <p>Displayed Enlgish Name:</p>
+          <p className="text-sm ">Displayed Enlgish Name:</p>
           <Badge>{banner.bannerData?.name_en}</Badge>
         </div>
         <div className="w-full flex items-center justify-between self-start">
-          <p> Displayed Arabic Name:</p>
+          <p className="text-sm "> Displayed Arabic Name:</p>
           <Badge>{banner.bannerData?.name_ar}</Badge>
         </div>
       </CardFooter>

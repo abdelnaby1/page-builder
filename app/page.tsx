@@ -9,9 +9,20 @@ export default async function Home() {
 
   return (
     <main className="container w-3/4">
-      <Link href={"/create"}>
-        <Button>New Widget</Button>
-      </Link>
+      <div className=" container flex items-center justify-center space-x-2">
+        {/* <Link href={"/banner"}>
+          <Button>Banner</Button>
+        </Link>
+        <Link href={"/slider"}>
+          <Button>Slider</Button>
+        </Link>
+        <Link href={"/products"}>
+          <Button>Products</Button>
+        </Link>
+        <Link href={"categories"}>
+          <Button>Categories</Button> */}
+        {/* </Link> */}
+      </div>
     </main>
   );
 }
