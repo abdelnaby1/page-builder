@@ -2,6 +2,7 @@
 
 import { getAllCategoriesAction } from "@/actions/categories.actions";
 import { CategoriesForm } from "@/components/forms/categories/CategoriesForm";
+import CategoriesList from "@/components/list/CategoriesList";
 import { buttonVariants } from "@/components/ui/button";
 import {
   SheetTrigger,
@@ -15,8 +16,8 @@ import { Plus } from "lucide-react";
 import React from "react";
 
 export default async function Page() {
-  const categoreis = await getAllCategoriesAction();
-  console.log("categories", categoreis);
+  const categories = await getAllCategoriesAction();
+  // console.log("categories", categories);
 
   return (
     <div className="container mt-3">
@@ -40,6 +41,9 @@ export default async function Page() {
             </div>
           </SheetContent>
         </Sheet>
+      </div>
+      <div>
+        <CategoriesList categories={categories} />
       </div>
     </div>
   );
