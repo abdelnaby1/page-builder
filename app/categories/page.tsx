@@ -1,5 +1,7 @@
-import { BannerForm } from "@/components/forms/banner/BannerForm";
-import { ProductForm } from "@/components/forms/product/ProductForm";
+"use server";
+
+import { getAllCategoriesAction } from "@/actions/categories.actions";
+import { CategoriesForm } from "@/components/forms/categories/CategoriesForm";
 import { buttonVariants } from "@/components/ui/button";
 import {
   SheetTrigger,
@@ -12,32 +14,33 @@ import {
 import { Plus } from "lucide-react";
 import React from "react";
 
-const page = () => {
+export default async function Page() {
+  const categoreis = await getAllCategoriesAction();
+  console.log("categories", categoreis);
+
   return (
     <div className="container mt-3">
       <div className="text-right mb-3">
         <Sheet>
           <SheetTrigger className={buttonVariants()}>
             <Plus size={16} className="mr-1" />
-            New Products Widget
+            New Categories Widget
           </SheetTrigger>
-          <SheetContent side={"bottom"} className="overflow-y-auto ">
+          <SheetContent className="overflow-y-auto  min-w-[450px]">
             <SheetHeader>
               <SheetTitle className="text-center mt-4">
-                Products Form
+                Categories Form
               </SheetTitle>
               <SheetDescription className="text-center">
                 Here you can create Categories Widget to be shown in your app.
               </SheetDescription>
             </SheetHeader>
             <div className="flex flex-col h-fit items-center pt-3">
-              <ProductForm />
+              <CategoriesForm />
             </div>
           </SheetContent>
         </Sheet>
       </div>
     </div>
   );
-};
-
-export default page;
+}
