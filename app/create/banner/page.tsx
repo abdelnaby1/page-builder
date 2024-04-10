@@ -1,38 +1,52 @@
 import { getAllBannersAction } from "@/actions/banner.actions";
 import { BannerForm } from "@/components/forms/banner/BannerForm";
 import BannerList from "@/components/list/BannerList";
+import { buttonVariants } from "@/components/ui/button";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import {
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  Sheet,
+} from "@/components/ui/sheet";
+import { Plus } from "lucide-react";
 import React from "react";
 
 export default async function page() {
   const banners = await getAllBannersAction();
 
   return (
-    <ResizablePanelGroup
-      direction="horizontal"
-      className="min-h-screen min-w-full rounded-lg border"
-    >
-      <ResizablePanel defaultSize={30}>
-        <h2 className="flex items-center justify-center scroll-m-20 border-b py-2 text-3xl font-semibold tracking-tight first:mt-0">
-          Banner Form
-        </h2>
-        <div className="flex flex-col h-full items-center pt-3 px-6">
-          <BannerForm />
-        </div>
-      </ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={70}>
-        <h2 className="flex items-center justify-center scroll-m-20 border-b py-2 text-3xl font-semibold tracking-tight first:mt-0">
-          All Banners in your app
-        </h2>
-        <div className="flex flex-col h-full items-center pt-3 px-6">
-          <BannerList banners={banners} />
-        </div>
-      </ResizablePanel>
-    </ResizablePanelGroup>
+    <div>
+      <div className="flex items-center justify-center space-x-4 scroll-m-20 border-b py-2 text-3xl font-semibold tracking-tight first:mt-0">
+        <h3>All Banners in your app</h3>
+        <Sheet>
+          <SheetTrigger className={buttonVariants()}>
+            <Plus size={16} className="mr-1" />
+            New Banner
+          </SheetTrigger>
+          <SheetContent className="overflow-y-auto  min-w-[450px] ">
+            <SheetHeader>
+              <SheetTitle className="text-center mt-4">Banner Form</SheetTitle>
+              <SheetDescription>
+                Here you can create just a default Banner or Banner that will
+                reference to someting in your app.
+              </SheetDescription>
+            </SheetHeader>
+            <div className="flex flex-col h-full items-center pt-3 px-6">
+              <BannerForm />
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+      <div className="container">
+        <BannerList banners={banners} />
+      </div>
+    </div>
   );
 }
