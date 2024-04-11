@@ -1,3 +1,5 @@
+import { number } from "zod";
+
 export interface IBanner {
   id: string;
   type: string;
@@ -9,5 +11,15 @@ export interface IBanner {
     url_ar: string;
     ref_type: string | null;
     ref_id: number | null;
+  } | null;
+}
+export interface ICategories {
+  id: string;
+  type: string;
+  createdAt: Date;
+  categoriesData: {
+    name_en: string;
+    name_ar: string;
+    categories_ids: number[];
   } | null;
 }

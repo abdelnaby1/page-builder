@@ -8,7 +8,9 @@ const prisma = new PrismaClient();
 export const getAllProductsAction = async () => {
   return await prisma.widget.findMany({
     where: {
-      type: "banner",
+      type: {
+        contains: "_products_by_",
+      },
     },
     select: {
       id: true,
@@ -118,6 +120,3 @@ export const createProductsByProductsIdsAction = async ({
 
   redirect(`/products`);
 };
-
-export const updateTodoAction = async () => {};
-export const deleteTodoAction = async () => {};

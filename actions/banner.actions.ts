@@ -85,5 +85,3 @@ export const createReferencedBannerAction = async ({
 
   redirect(`/banners`);
 };
-export const updateTodoAction = async () => {};
-export const deleteTodoAction = async () => {};

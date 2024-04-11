@@ -169,3 +169,28 @@ export const ProductsByProductsIdsFormSchema = z.object({
 export type ProductsByProductsIdsFormValues = z.infer<
   typeof ProductsByProductsIdsFormSchema
 >;
+
+export const CategoriesByCategoriesIdsFormSchema = z.object({
+  name_en: z
+    .string()
+    .min(6, {
+      message: "Name in Enlish must be at least 6 characters.",
+    })
+    .max(30, {
+      message: "Name in Enlish must not be longer than 30 characters.",
+    }),
+  name_ar: z
+    .string()
+    .min(6, {
+      message: "Name in Arabic must be at least 6 characters.",
+    })
+    .max(30, {
+      message: "Name in Arabic must not be longer than 30 characters.",
+    }),
+  categoeis_ids: z.array(z.number()).optional(),
+  direction: z.string(),
+});
+
+export type CategoriesByCategoriesIdsFormValues = z.infer<
+  typeof CategoriesByCategoriesIdsFormSchema
+>;

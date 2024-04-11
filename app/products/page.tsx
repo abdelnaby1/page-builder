@@ -27,8 +27,7 @@ const page = () => {
                 Products Form
               </SheetTitle>
               <SheetDescription className="text-center">
-                Here you can create just a default Banner or Banner that will
-                reference to someting in your app.
+                Here you can create Categories Widget to be shown in your app.
               </SheetDescription>
             </SheetHeader>
             <div className="flex flex-col h-fit items-center pt-3">
