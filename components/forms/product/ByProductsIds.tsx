@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import CreatableSelect from "react-select/creatable";
 
 import { Input } from "@/components/ui/input";
@@ -27,7 +27,12 @@ import {
   ProductsByProductsIdsFormValues,
 } from "@/validation";
 import Spinner from "@/components/Spinner";
-import { KeyboardEventHandler, useState } from "react";
+import {
+  Dispatch,
+  KeyboardEventHandler,
+  SetStateAction,
+  useState,
+} from "react";
 import { createProductsByProductsIdsAction } from "@/actions/products.actions";
 import { uploadImage } from "@/firebase";
 import { toast } from "@/components/ui/use-toast";
@@ -51,7 +56,10 @@ const createOption = (label: string) => ({
   label,
   value: label,
 });
-export function ByProductsIdsForm() {
+interface Iprops {
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+export function ByProductsIdsForm({ setIsOpen }: Iprops) {
   const [isLoading, setIsLoading] = useState(false);
 
   const [inputValue, setInputValue] = useState("");
@@ -117,6 +125,7 @@ export function ByProductsIdsForm() {
       });
     } finally {
       setIsLoading(false);
+      setIsOpen(false);
     }
   }
 

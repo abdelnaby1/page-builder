@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
 import {
@@ -16,14 +15,10 @@ import {
 
 import { Button } from "@/components/ui/button";
 import {
-  DefaultBannerFormSchema,
-  DefaultBannerFormValues,
   ProductsByCategoryIdFormSchema,
   ProductsByCategoryIdFormValues,
 } from "@/validation";
-import { useState } from "react";
-import { uploadImage } from "@/firebase";
-import { createDefaultBannerAction } from "@/actions/banner.actions";
+import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import Spinner from "@/components/Spinner";
@@ -45,7 +40,10 @@ const defaultValues: Partial<ProductsByCategoryIdFormValues> = {
   direction: directions[0],
 };
 
-export function ByCategoryIdForm() {
+interface Iprops {
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+export function ByCategoryIdForm({ setIsOpen }: Iprops) {
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<ProductsByCategoryIdFormValues>({
     resolver: zodResolver(ProductsByCategoryIdFormSchema),
@@ -81,6 +79,7 @@ export function ByCategoryIdForm() {
       });
     } finally {
       setIsLoading(false);
+      setIsOpen(false);
     }
   }
 

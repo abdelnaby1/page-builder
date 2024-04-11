@@ -16,7 +16,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { DefaultBannerFormSchema, DefaultBannerFormValues } from "@/validation";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { uploadImage } from "@/firebase";
 import { createDefaultBannerAction } from "@/actions/banner.actions";
 import { toast } from "@/components/ui/use-toast";
@@ -29,8 +29,10 @@ const defaultValues: Partial<DefaultBannerFormValues> = {
   image_en: null,
   image_ar: null,
 };
-
-export function DefaultBannerForm() {
+interface Iprops {
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+export function DefaultBannerForm({ setIsOpen }: Iprops) {
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<DefaultBannerFormValues>({
     resolver: zodResolver(DefaultBannerFormSchema),
@@ -68,6 +70,7 @@ export function DefaultBannerForm() {
       });
     } finally {
       setIsLoading(false);
+      setIsOpen(false);
     }
   }
 
