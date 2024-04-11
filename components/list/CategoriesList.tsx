@@ -1,6 +1,5 @@
-import { IBanner, ICategories } from "@/interfaces";
+import { ICategories } from "@/interfaces";
 import React from "react";
-import BannerCard from "../cards/BannerCard";
 import CategoriesCard from "../cards/CategoriesCard";
 interface Iprops {
   categories: ICategories[];

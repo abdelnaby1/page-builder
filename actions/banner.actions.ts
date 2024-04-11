@@ -10,6 +10,9 @@ export const getAllBannersAction = async () => {
     where: {
       type: "banner",
     },
+    orderBy: {
+      order: "asc",
+    },
     select: {
       id: true,
       type: true,

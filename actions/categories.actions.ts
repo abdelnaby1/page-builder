@@ -12,6 +12,9 @@ export const getAllCategoriesAction = async () => {
         contains: "_categories_by_",
       },
     },
+    orderBy: {
+      order: "asc",
+    },
     select: {
       id: true,
       type: true,

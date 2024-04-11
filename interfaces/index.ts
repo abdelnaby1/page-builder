@@ -23,3 +23,14 @@ export interface ICategories {
     categories_ids: number[];
   } | null;
 }
+export interface IProducts {
+  id: string;
+  type: string;
+  createdAt: Date;
+  productsData: {
+    name_en: string;
+    name_ar: string;
+    category_id: number | null;
+    products_ids: number[];
+  } | null;
+}
