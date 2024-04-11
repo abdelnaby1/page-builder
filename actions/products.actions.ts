@@ -9,8 +9,11 @@ export const getAllProductsAction = async () => {
   return await prisma.widget.findMany({
     where: {
       type: {
-        contains: "_products_by_",
+        contains: "_products",
       },
+    },
+    orderBy: {
+      order: "asc",
     },
     select: {
       id: true,

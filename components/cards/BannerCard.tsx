@@ -42,7 +42,9 @@ const BannerCard = ({ banner }: Iprops) => {
               <p className="text-sm ">
                 Referenced {banner.bannerData?.ref_type} ID:
               </p>
-              <Badge className="ml-2">{banner.bannerData?.ref_id}</Badge>
+              <Badge variant={"secondary"} className="ml-2">
+                {banner.bannerData?.ref_id}
+              </Badge>
             </div>
           )}
         </CardTitle>
@@ -71,11 +73,11 @@ const BannerCard = ({ banner }: Iprops) => {
       <CardFooter className="flex flex-col space-y-4">
         <div className="w-full flex items-center justify-between self-start">
           <p className="text-sm ">Displayed Enlgish Name:</p>
-          <Badge>{banner.bannerData?.name_en}</Badge>
+          <Badge variant={"secondary"}>{banner.bannerData?.name_en}</Badge>
         </div>
         <div className="w-full flex items-center justify-between self-start">
           <p className="text-sm "> Displayed Arabic Name:</p>
-          <Badge>{banner.bannerData?.name_ar}</Badge>
+          <Badge variant={"secondary"}>{banner.bannerData?.name_ar}</Badge>
         </div>
       </CardFooter>
     </Card>

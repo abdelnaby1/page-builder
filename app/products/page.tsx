@@ -1,12 +1,21 @@
+"use server";
+
+import { getAllProductsAction } from "@/actions/products.actions";
 import ProductForm from "@/components/forms/product";
+import ProductsList from "@/components/list/ProductsList";
 import React from "react";
 
-const page = () => {
-  return (
-    <div className="container mt-3">
-      <ProductForm />
-    </div>
-  );
-};
+export default async function Page() {
+  {
+    const products = await getAllProductsAction();
 
-export default page;
+    return (
+      <div className="container mt-3">
+        <ProductForm />
+        <div>
+          <ProductsList products={products} />
+        </div>
+      </div>
+    );
+  }
+}
