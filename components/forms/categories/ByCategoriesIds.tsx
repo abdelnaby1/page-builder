@@ -27,7 +27,12 @@ import {
   CategoriesByCategoriesIdsFormValues,
 } from "@/validation";
 import Spinner from "@/components/Spinner";
-import { KeyboardEventHandler, useState } from "react";
+import {
+  Dispatch,
+  KeyboardEventHandler,
+  SetStateAction,
+  useState,
+} from "react";
 import { createProductsByProductsIdsAction } from "@/actions/products.actions";
 import { uploadImage } from "@/firebase";
 import { toast } from "@/components/ui/use-toast";
@@ -52,7 +57,11 @@ const createOption = (label: string) => ({
   label,
   value: label,
 });
-export function ByCategoriesIdsForm() {
+
+interface Iprops {
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+export function ByCategoriesIdsForm({ setIsOpen }: Iprops) {
   const [isLoading, setIsLoading] = useState(false);
 
   const [inputValue, setInputValue] = useState("");
@@ -118,6 +127,7 @@ export function ByCategoriesIdsForm() {
       });
     } finally {
       setIsLoading(false);
+      setIsOpen(false);
     }
   }
 
