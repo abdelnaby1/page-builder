@@ -26,7 +26,7 @@ import {
   GeneralProductsFormValues,
 } from "@/validation";
 import Spinner from "@/components/Spinner";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { capitalizeEveryWord } from "@/lib/utils";
@@ -40,8 +40,10 @@ const defaultValues: Partial<GeneralProductsFormValues> = {
   type: types[0],
   direction: directions[0],
 };
-
-export function GeneralProductsForm() {
+interface Iprops {
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+export function GeneralProductsForm({ setIsOpen }: Iprops) {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<GeneralProductsFormValues>({
@@ -77,6 +79,7 @@ export function GeneralProductsForm() {
       });
     } finally {
       setIsLoading(false);
+      setIsOpen(false);
     }
   }
 

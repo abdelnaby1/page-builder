@@ -26,7 +26,7 @@ import {
   ReferencedBannerFormValues,
 } from "@/validation";
 import Spinner from "@/components/Spinner";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { createReferencedBannerAction } from "@/actions/banner.actions";
 import { uploadImage } from "@/firebase";
 import { toast } from "@/components/ui/use-toast";
@@ -39,8 +39,10 @@ const defaultValues: Partial<ReferencedBannerFormValues> = {
   ref_type: "",
   ref_id: 1,
 };
-
-export function ReferencedBannerForm() {
+interface Iprops {
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+export function ReferencedBannerForm({ setIsOpen }: Iprops) {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<ReferencedBannerFormValues>({
@@ -81,6 +83,7 @@ export function ReferencedBannerForm() {
       });
     } finally {
       setIsLoading(false);
+      setIsOpen(false);
     }
   }
 
